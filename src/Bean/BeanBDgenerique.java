@@ -13,21 +13,26 @@ public class BeanBDgenerique {
             e.printStackTrace();
         }
     }
-    public ResultSet executeReq(String sql)
-    {
+    public ResultSet executeQuery(String sql, String nom) {
         try {
-            Statement instr = con.createStatement();
-            ResultSet rs = instr.executeQuery(sql);
-
-            return rs;
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, nom); // Définissez le paramètre
+            return pstmt.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
-    public Connection getConnection() {
-        return con;
+    public void executeUpdate(String sql, String nom) {
+        try {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, nom);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void closeConnection() {
         try {
