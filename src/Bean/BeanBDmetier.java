@@ -61,5 +61,9 @@ public class BeanBDmetier {
             String sql = "UPDATE factures SET paye = 1 WHERE id = ?";
             BDg.executeUpdate(sql,idFacture);
     }
+    public void CouperCo()
+    {
+        BDg.closeConnection();
+    }
 
 }

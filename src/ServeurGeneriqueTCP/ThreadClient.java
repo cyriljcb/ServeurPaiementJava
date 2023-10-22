@@ -16,16 +16,6 @@ public abstract class ThreadClient extends Thread
 
     private static int numCourant = 1;
 
-    public ThreadClient(Protocole protocole, Socket csocket, Logger logger) throws
-            IOException
-    {
-        super("TH Client " + numCourant + " (protocole=" + protocole.getNom() + ")");
-        this.protocole = protocole;
-        this.csocket = csocket;
-        this.logger = logger;
-        this.numero = numCourant++;
-    }
-
     public ThreadClient(Protocole protocole, ThreadGroup groupe, Logger logger)
             throws IOException
     {
@@ -49,7 +39,6 @@ public abstract class ThreadClient extends Thread
                 oos = new ObjectOutputStream(csocket.getOutputStream());
 
                 while (true) {
-                    System.out.println("est dans le while");
                     Requete requete = (Requete) ois.readObject();
                     System.out.println(" requete = " + requete);
                     Reponse reponse = protocole.TraiteRequete(requete, csocket);

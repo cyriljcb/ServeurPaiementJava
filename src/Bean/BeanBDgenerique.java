@@ -33,8 +33,6 @@ public class BeanBDgenerique {
             e.printStackTrace();
         }
     }
-
-
     public void closeConnection() {
         try {
             if (con != null) {

@@ -50,6 +50,7 @@ public class OVESP implements Protocole {
         if (requete instanceof RequeteLogin) return TraiteRequeteLOGIN((RequeteLogin) requete, socket);
         if (requete instanceof RequeteLOGOUT) TraiteRequeteLOGOUT((RequeteLOGOUT) requete);
         if (requete instanceof RequeteFacture) return TraiteRequeteFacture((RequeteFacture) requete);
+        if (requete instanceof RequetePayeFacture) return TraiteRequetePayeFacture((RequetePayeFacture) requete);
         return null;
     }
 
@@ -66,9 +67,13 @@ public class OVESP implements Protocole {
     private synchronized ReponseFacture TraiteRequeteFacture(RequeteFacture requete) throws FinConnexionException{
         System.out.println("RequeteFACTURE reçue " );
         List<Facture> factures = bean.getFactures(requete.getIdClient());
-        afficherFactures(factures);
         return new ReponseFacture(factures);
-
+    }
+    private synchronized ReponsePayeFacture TraiteRequetePayeFacture(RequetePayeFacture requete) throws FinConnexionException{
+        System.out.println("RequetePayeFACTURE reçue " );
+        if(testNulVisa(requete.getNumVisa()))
+            bean.PayFacture(requete.getNumFacture());//faut modifier pour utiliser les info de la visa
+        return new ReponsePayeFacture(testNulVisa(requete.getNumVisa()));
     }
 
     //
@@ -78,6 +83,26 @@ public class OVESP implements Protocole {
         logger.Trace(requete.getLogin() + " correctement déloggé");
         throw new FinConnexionException(null);
     }
+    public static boolean testNulVisa(String numVisa) {
+        // dans le cas ou on rentre des caractères autre que des chiffres
+        numVisa = numVisa.replaceAll("[^0-9]", "");
 
+        int somme = 0;
+        boolean doubleDigit = false;
+        for (int i = numVisa.length() - 1; i >= 0; i--) {
+            int digit = Character.getNumericValue(numVisa.charAt(i));
+
+            if (doubleDigit) {
+                digit *= 2;
+                if (digit > 9) {
+                    digit -= 9;
+                }
+            }
+
+            somme += digit;
+            doubleDigit = !doubleDigit;
+        }
+        return (somme % 10 == 0);
+    }
 
 }
