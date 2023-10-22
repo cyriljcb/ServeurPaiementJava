@@ -65,8 +65,7 @@ public class OVESP implements Protocole {
     }
     private synchronized ReponseFacture TraiteRequeteFacture(RequeteFacture requete) throws FinConnexionException{
         System.out.println("RequeteFACTURE reçue " );
-        bean.PayFacture("1");
-        List<Facture> factures = bean.getFactures("1");
+        List<Facture> factures = bean.getFactures(requete.getIdClient());
         afficherFactures(factures);
         return new ReponseFacture(factures);
 

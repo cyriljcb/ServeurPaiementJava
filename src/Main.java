@@ -41,10 +41,9 @@ public class Main {
                 Protocole protocole;
                 ThreadServeur threadServeur;
 
-               // BeanBDmetier bean = new BeanBDmetier("jdbc:mysql://192.168.47.128/PourStudent" , "Student" , "PassStudent1_");
-                //bean.LoginEmploye("cyril" , "123");
-//                bean.PayFacture("1");
-//                List<Facture> factures = bean.getFactures("1");
+//                BeanBDmetier bean = new BeanBDmetier("jdbc:mysql://192.168.47.128/PourStudent" , "Student" , "PassStudent1_");
+//                bean.LoginEmploye("cyril" , "123");
+//                List<Facture> factures = bean.getFactures("5");
 //                afficherFactures(factures);
 
                 protocole = new OVESP();
