@@ -39,6 +39,7 @@ public class Main {
                 protocole = new OVESP();
                 try {
                     //TODO faut faire qqch pour les acces concurrent (mutex,...)
+                    //TODO plus interface
                     System.out.println("port : "+port+" nbthread = "+nbthread);
                     threadServeur = new ThreadServeurPool(port, protocole, nbthread);
                 } catch (IOException e) {
