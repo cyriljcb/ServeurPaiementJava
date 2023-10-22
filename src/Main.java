@@ -1,13 +1,15 @@
 import Bean.BeanBDgenerique;
 import Bean.BeanBDmetier;
 import Classe.Facture;
-import OVESP.OVESP;
+import OVESP.*;
 import ServeurGeneriqueTCP.Logger;
 import ServeurGeneriqueTCP.Protocole;
 import ServeurGeneriqueTCP.ThreadServeur;
 import ServeurGeneriqueTCP.ThreadServeurPool;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,6 +18,9 @@ import java.util.List;
 
 public class Main {
     Protocole protocole;
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
+
     public static void afficherFactures(List<Facture> factures) {
         for (Facture facture : factures) {
             System.out.println("ID : " + facture.getId());
@@ -26,7 +31,8 @@ public class Main {
             System.out.println();
         }
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -35,11 +41,11 @@ public class Main {
                 Protocole protocole;
                 ThreadServeur threadServeur;
 
-                BeanBDmetier bean = new BeanBDmetier("jdbc:mysql://192.168.47.128/PourStudent" ,"Student","PassStudent1_");
-                bean.LoginEmploye("cyril","123");
-                bean.PayFacture("1");
-                List<Facture> factures = bean.getFactures("1");
-                afficherFactures(factures);
+               // BeanBDmetier bean = new BeanBDmetier("jdbc:mysql://192.168.47.128/PourStudent" , "Student" , "PassStudent1_");
+                //bean.LoginEmploye("cyril" , "123");
+//                bean.PayFacture("1");
+//                List<Facture> factures = bean.getFactures("1");
+//                afficherFactures(factures);
 
                 protocole = new OVESP();
                 try {
@@ -49,6 +55,7 @@ public class Main {
                     throw new RuntimeException(e);
                 }
                 threadServeur.start();
+
             }
         });
     }

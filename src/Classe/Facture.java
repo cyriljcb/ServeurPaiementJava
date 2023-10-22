@@ -1,6 +1,8 @@
 package Classe;
 
-public class Facture {
+import java.io.Serializable;
+
+public class Facture implements Serializable {
     private int id;
     private int idClient;
     private String date;

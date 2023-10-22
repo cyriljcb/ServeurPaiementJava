@@ -5,14 +5,14 @@ import java.sql.*;
 public class BeanBDgenerique {
     private Connection con;
 
-    public BeanBDgenerique(String URLJDBC, String nom,String mdp)
-    {
+    public BeanBDgenerique(String URLJDBC, String nom, String mdp) {
         try {
             con = DriverManager.getConnection(URLJDBC, nom, mdp);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     public ResultSet executeQuery(String sql, String nom) {
         try {
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -23,6 +23,7 @@ public class BeanBDgenerique {
             return null;
         }
     }
+
     public void executeUpdate(String sql, String nom) {
         try {
             PreparedStatement pstmt = con.prepareStatement(sql);

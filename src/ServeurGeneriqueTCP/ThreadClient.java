@@ -51,7 +51,7 @@ public abstract class ThreadClient extends Thread
                 while (true) {
                     System.out.println("est dans le while");
                     Requete requete = (Requete) ois.readObject();
-                    System.out.println(" requete =" + requete);
+                    System.out.println(" requete = " + requete);
                     Reponse reponse = protocole.TraiteRequete(requete, csocket);
                     oos.writeObject(reponse);
                     oos.flush();

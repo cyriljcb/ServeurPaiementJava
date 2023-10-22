@@ -1,11 +1,11 @@
 package ServeurGeneriqueTCP;
-import OVESP.ReponseLogin;
+import OVESP.Reponse;
 import OVESP.Requete;
 
 import java.net.Socket;
 
 public interface Protocole {
     String getNom();
-    ReponseLogin TraiteRequete(Requete requete, Socket socket) throws FinConnexionException;
+    Reponse TraiteRequete(Requete requete, Socket socket) throws FinConnexionException;
 
 }
