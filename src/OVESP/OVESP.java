@@ -1,6 +1,7 @@
 package OVESP;
 
 import Bean.BeanBDmetier;
+import Classe.Caddie;
 import Classe.Facture;
 import ServeurGeneriqueTCP.FinConnexionException;
 import ServeurGeneriqueTCP.Logger;
@@ -48,9 +49,10 @@ public class OVESP implements Protocole {
     @Override
     public synchronized Reponse TraiteRequete(Requete requete, Socket socket) throws FinConnexionException {
         if (requete instanceof RequeteLogin) return TraiteRequeteLOGIN((RequeteLogin) requete, socket);
-        if (requete instanceof RequeteLOGOUT) TraiteRequeteLOGOUT((RequeteLOGOUT) requete);
+        if (requete instanceof RequeteLOGOUT) return TraiteRequeteLOGOUT((RequeteLOGOUT) requete);
         if (requete instanceof RequeteFacture) return TraiteRequeteFacture((RequeteFacture) requete);
         if (requete instanceof RequetePayeFacture) return TraiteRequetePayeFacture((RequetePayeFacture) requete);
+        if (requete instanceof RequeteCaddie) return TraiteRequeteCaddie((RequeteCaddie) requete);
         return null;
     }
 
@@ -76,9 +78,13 @@ public class OVESP implements Protocole {
             bean.PayFacture(requete.getNumFacture());//faut modifier pour utiliser les info de la visa
         return new ReponsePayeFacture(testNulVisa(requete.getNumVisa()));
     }
-
+    private synchronized ReponseCaddie TraiteRequeteCaddie(RequeteCaddie requete) throws FinConnexionException{
+        System.out.println("RequeteCaddie reçue " );
+        List<Caddie> list = bean.getCaddie(requete.getIdFacture());
+        return new ReponseCaddie(list);
+    }
     //
-    private synchronized void TraiteRequeteLOGOUT(RequeteLOGOUT requete) throws FinConnexionException {
+    private synchronized ReponseLogout TraiteRequeteLOGOUT(RequeteLOGOUT requete) throws FinConnexionException {
         System.out.println("RequeteLOGOUT reçue de " + requete.getLogin());
         clientsConnectes.remove(requete.getLogin());
         throw new FinConnexionException(null);
