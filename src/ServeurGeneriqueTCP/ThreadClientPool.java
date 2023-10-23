@@ -15,20 +15,17 @@ public class ThreadClientPool extends ThreadClient
     @Override
     public void run()
     {
-//        logger.Trace("TH Client (Pool) démarre...");
         boolean interrompu = false;
         while(!interrompu)
         {
             try
             {
-                //logger.Trace("Attente d'une connexion...");
                 csocket = connexionsEnAttente.getConnexion();
                 System.out.println("Connexion prise en charge.");
                 super.run();
             }
             catch (InterruptedException ex)
             {
-               // logger.Trace("Demande d'interruption...");
                 interrompu = true;
             }
         }

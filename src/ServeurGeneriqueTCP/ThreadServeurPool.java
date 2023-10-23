@@ -22,17 +22,17 @@ public class ThreadServeurPool extends ThreadServeur
     @Override
     public void run()
     {
-        //logger.Trace("Démarrage du TH Serveur (Pool)...");
         System.out.println("Démarrage du TH Serveur (Pool)...");
-        // Création du pool de threads
         try
         {
-            for (int i=0 ; i<taillePool ; i++)
-                new ThreadClientPool(protocole,connexionsEnAttente,pool,logger).start();
+            for (int i=0 ; i<taillePool ; i++) {
+                System.out.println("création de thread client num "+i+1);
+                new ThreadClientPool(protocole, connexionsEnAttente, pool, logger).start();
+            }
         }
         catch (IOException ex)
         {
-            //logger.Trace("Erreur I/O lors de la création du pool de threads");
+
             System.out.println("Erreur I/O lors de la création du pool de threads");
             return;
         }
@@ -45,7 +45,6 @@ public class ThreadServeurPool extends ThreadServeur
             {
                 ssocket.setSoTimeout(2000);
                 csocket = ssocket.accept();
-                //logger.Trace("Connexion acceptée, mise en file d'attente.");
                 System.out.println("Connexion acceptée, mise en file d'attente.");
                 connexionsEnAttente.addConnexion(csocket);
             }

@@ -58,7 +58,8 @@ public class OVESP implements Protocole {
         System.out.println("RequeteLOGIN reçue de " + requete.getLogin());
         String password = passwords.get(requete.getLogin());
 
-       boolean v= bean.LoginEmploye(requete.getLogin() , password);
+        System.out.println("login :"+requete.getLogin()+" mdp : "+requete.getPassword());
+       boolean v= bean.LoginEmploye(requete.getLogin() , requete.getPassword());
        if(v)
            clientsConnectes.put(requete.getLogin(), socket);
        return new ReponseLogin(v);
@@ -80,7 +81,6 @@ public class OVESP implements Protocole {
     private synchronized void TraiteRequeteLOGOUT(RequeteLOGOUT requete) throws FinConnexionException {
         System.out.println("RequeteLOGOUT reçue de " + requete.getLogin());
         clientsConnectes.remove(requete.getLogin());
-        logger.Trace(requete.getLogin() + " correctement déloggé");
         throw new FinConnexionException(null);
     }
     public static boolean testNulVisa(String numVisa) {
