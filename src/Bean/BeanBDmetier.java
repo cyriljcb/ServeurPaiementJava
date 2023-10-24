@@ -33,7 +33,12 @@ public class BeanBDmetier {
 
         return test;
     }
+    public void CreationEmploye(String nom, String mdp)
+    {
+        String sql = "INSERT INTO employes (login,password) VALUES (?,?);";
+        BDg.executeUpdate(sql, nom,mdp);
 
+    }
     public List<Facture> getFactures(String idCli) {
         List<Facture> factures = new ArrayList<>();
 

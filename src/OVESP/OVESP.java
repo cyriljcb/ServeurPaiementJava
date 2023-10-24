@@ -59,9 +59,15 @@ public class OVESP implements Protocole {
     private synchronized ReponseLogin TraiteRequeteLOGIN(RequeteLogin requete, Socket socket) throws FinConnexionException {
         System.out.println("RequeteLOGIN reçue de " + requete.getLogin());
         String password = passwords.get(requete.getLogin());
-
+        boolean v;
         System.out.println("login :"+requete.getLogin()+" mdp : "+requete.getPassword());
-       boolean v= bean.LoginEmploye(requete.getLogin() , requete.getPassword());
+        if(requete.isNouveau())
+        {
+            bean.CreationEmploye(requete.getLogin(), requete.getPassword());
+            v = true;
+        }
+        else
+            v= bean.LoginEmploye(requete.getLogin() , requete.getPassword());
        if(v)
            clientsConnectes.put(requete.getLogin(), socket);
        return new ReponseLogin(v);

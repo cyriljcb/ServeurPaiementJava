@@ -23,6 +23,16 @@ public class BeanBDgenerique {
             return null;
         }
     }
+    public void executeUpdate(String sql, String nom,String password) {
+        try {
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, nom); // Définissez le paramètre
+            pstmt.setString(2, password);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void executeUpdate(String sql, String nom) {
         try {
