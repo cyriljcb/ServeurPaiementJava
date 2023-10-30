@@ -4,7 +4,6 @@ import Bean.BeanBDmetier;
 import Classe.Caddie;
 import Classe.Facture;
 import ServeurGeneriqueTCP.FinConnexionException;
-import ServeurGeneriqueTCP.Logger;
 import ServeurGeneriqueTCP.Protocole;
 
 import java.net.Socket;
@@ -12,29 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class OVESP implements Protocole {
-    private HashMap<String, String> passwords;
     private HashMap<String, Socket> clientsConnectes;
 
-    private Logger logger;
     private  BeanBDmetier bean;
-    public static void afficherFactures(List<Facture> factures) {
-        for (Facture facture : factures) {
-            System.out.println("ID : " + facture.getId());
-            System.out.println("ID du client : " + facture.getIdClient());
-            System.out.println("Date : " + facture.getDate());
-            System.out.println("Montant : " + facture.getMontant());
-            System.out.println("Payée : " + facture.isPaye());
-            System.out.println();
-        }
-    }
 
     public OVESP() {
-        passwords = new HashMap<>();
-        passwords.put("wagner" , "abcd");
-        passwords.put("charlet" , "1234");
-        passwords.put("calmant" , "azerty");
-        passwords.put("a" , "a");
-
         //logger = log;
         System.out.println("est passé ovesp");
         clientsConnectes = new HashMap<>();
@@ -58,21 +39,26 @@ public class OVESP implements Protocole {
 
     private synchronized ReponseLogin TraiteRequeteLOGIN(RequeteLogin requete, Socket socket) throws FinConnexionException {
         System.out.println("RequeteLOGIN reçue de " + requete.getLogin());
-        String password = passwords.get(requete.getLogin());
         boolean v;
-        System.out.println("login :"+requete.getLogin()+" mdp : "+requete.getPassword());
-        if(requete.isNouveau())
-        {
-            bean.CreationEmploye(requete.getLogin(), requete.getPassword());
-            v = true;
-        }
-        else
-            v= bean.LoginEmploye(requete.getLogin() , requete.getPassword());
-       if(v)
-           clientsConnectes.put(requete.getLogin(), socket);
-       return new ReponseLogin(v);
+        System.out.println("login :" + requete.getLogin() + " mdp : " + requete.getPassword());
 
+        if (clientsConnectes.containsKey(requete.getLogin())) {
+            v = false; // Le client est déjà connecté
+        } else {
+            if (requete.isNouveau()) {
+                bean.CreationEmploye(requete.getLogin(), requete.getPassword());
+                v = true;
+            } else {
+                v = bean.LoginEmploye(requete.getLogin(), requete.getPassword());
+            }
+
+            if (v) {
+                clientsConnectes.put(requete.getLogin(), socket);
+            }
+        }
+        return new ReponseLogin(v);
     }
+
     private synchronized ReponseFacture TraiteRequeteFacture(RequeteFacture requete) throws FinConnexionException{
         System.out.println("RequeteFACTURE reçue " );
         List<Facture> factures = bean.getFactures(requete.getIdClient());
@@ -81,7 +67,7 @@ public class OVESP implements Protocole {
     private synchronized ReponsePayeFacture TraiteRequetePayeFacture(RequetePayeFacture requete) throws FinConnexionException{
         System.out.println("RequetePayeFACTURE reçue " );
         if(testNulVisa(requete.getNumVisa()))
-            bean.PayFacture(requete.getNumFacture());//faut modifier pour utiliser les info de la visa
+            bean.PayFacture(requete.getNumFacture());
         return new ReponsePayeFacture(testNulVisa(requete.getNumVisa()));
     }
     private synchronized ReponseCaddie TraiteRequeteCaddie(RequeteCaddie requete) throws FinConnexionException{
@@ -92,9 +78,20 @@ public class OVESP implements Protocole {
     //
     private synchronized ReponseLogout TraiteRequeteLOGOUT(RequeteLOGOUT requete) throws FinConnexionException {
         System.out.println("RequeteLOGOUT reçue de " + requete.getLogin());
+        System.out.println("affichage avant retirer");
+        afficherClientsConnectes();
         clientsConnectes.remove(requete.getLogin());
-        throw new FinConnexionException(null);
+        System.out.println("affichage apres retirer");
+        afficherClientsConnectes();
+        return new ReponseLogout(true);
     }
+    public void afficherClientsConnectes() {
+        System.out.println("Clients connectés :");
+        for (String client : clientsConnectes.keySet()) {
+            System.out.println(client);
+        }
+    }
+
     public static boolean testNulVisa(String numVisa) {
         // dans le cas ou on rentre des caractères autre que des chiffres
         numVisa = numVisa.replaceAll("[^0-9]", "");

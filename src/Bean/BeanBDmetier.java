@@ -1,12 +1,12 @@
 package Bean;
 
+import Classe.Caddie;
+import Classe.Facture;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import Classe.Caddie;
-import Classe.Facture;
 
 public class BeanBDmetier {
     private BeanBDgenerique BDg;
@@ -35,6 +35,7 @@ public class BeanBDmetier {
     }
     public void CreationEmploye(String nom, String mdp)
     {
+        System.out.println("creation employe");
         String sql = "INSERT INTO employes (login,password) VALUES (?,?);";
         BDg.executeUpdate(sql, nom,mdp);
 
