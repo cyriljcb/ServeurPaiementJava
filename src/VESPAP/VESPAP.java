@@ -1,4 +1,4 @@
-package OVESP;
+package VESPAP;
 
 import Bean.BeanBDmetier;
 import Classe.Caddie;
@@ -10,12 +10,12 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 
-public class OVESP implements Protocole {
+public class VESPAP implements Protocole {
     private HashMap<String, Socket> clientsConnectes;
 
     private  BeanBDmetier bean;
 
-    public OVESP() {
+    public VESPAP() {
         //logger = log;
         System.out.println("est passé ovesp");
         clientsConnectes = new HashMap<>();
@@ -24,7 +24,7 @@ public class OVESP implements Protocole {
 
     @Override
     public String getNom() {
-        return "OVESP";
+        return "VESPAP";
     }
 
     @Override
@@ -95,23 +95,27 @@ public class OVESP implements Protocole {
     public static boolean testNulVisa(String numVisa) {
         // dans le cas ou on rentre des caractères autre que des chiffres
         numVisa = numVisa.replaceAll("[^0-9]", "");
+        if(numVisa.length()==16)
+        {
+            int somme = 0;
+            boolean doubleDigit = false;
+            for (int i = numVisa.length() - 1; i >= 0; i--) {
+                int digit = Character.getNumericValue(numVisa.charAt(i));
 
-        int somme = 0;
-        boolean doubleDigit = false;
-        for (int i = numVisa.length() - 1; i >= 0; i--) {
-            int digit = Character.getNumericValue(numVisa.charAt(i));
-
-            if (doubleDigit) {
-                digit *= 2;
-                if (digit > 9) {
-                    digit -= 9;
+                if (doubleDigit) {
+                    digit *= 2;
+                    if (digit > 9) {
+                        digit -= 9;
+                    }
                 }
+                somme += digit;
+                doubleDigit = !doubleDigit;
             }
-
-            somme += digit;
-            doubleDigit = !doubleDigit;
+            return (somme % 10 == 0);
         }
-        return (somme % 10 == 0);
+        else
+            return false;
+
     }
 
 }

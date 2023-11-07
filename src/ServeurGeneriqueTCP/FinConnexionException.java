@@ -1,6 +1,6 @@
 package ServeurGeneriqueTCP;
 
-import OVESP.ReponseLogin;
+import VESPAP.ReponseLogin;
 
 public class FinConnexionException extends Exception {
     private ReponseLogin reponse;

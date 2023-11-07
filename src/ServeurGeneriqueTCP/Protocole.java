@@ -1,6 +1,6 @@
 package ServeurGeneriqueTCP;
-import OVESP.Reponse;
-import OVESP.Requete;
+import VESPAP.Reponse;
+import VESPAP.Requete;
 
 import java.net.Socket;
 

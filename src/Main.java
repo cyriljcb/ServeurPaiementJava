@@ -1,4 +1,4 @@
-import OVESP.*;
+import VESPAP.*;
 import ServeurGeneriqueTCP.Protocole;
 import ServeurGeneriqueTCP.ThreadServeur;
 import ServeurGeneriqueTCP.ThreadServeurPool;
@@ -36,7 +36,7 @@ public class Main {
                 }
                 Protocole protocole;
                 ThreadServeur threadServeur;
-                protocole = new OVESP();
+                protocole = new VESPAP();
                 try {
                     //TODO faut faire qqch pour les acces concurrent (mutex,...)
                     //TODO plus interface
